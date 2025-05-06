@@ -14,6 +14,42 @@
 ### Swagger estará disponible en: http://localhost:3000/api
 
 ### GraphQL Playground estará en: http://localhost:3000/graphql
+# Write your query or mutation here
+query {
+  findAll {
+    id
+    nombre
+    email
+  }
+}
+#
+query {
+  findOne(id: 2) {
+    id
+    nombre
+    email
+  }
+}
+#
+mutation {
+  createUser(input: { nombre: "carlos", email: "carlos@example.com", password: "123456" }) {
+    id
+    nombre
+    email
+  }
+}
+#
+mutation {
+  updateUser(id: "1003", input: { nombre: "Carlos Actualizado", email: "carlos_updated@example.com", password: "123456" }) {
+    id
+    nombre
+    email
+  }
+}
+#
+mutation {
+  removeUser(id: "1")
+}
 
 
 <p align="center">

@@ -10,13 +10,22 @@ type User {
 
 type Query {
   findAll: [User!]!
+  findOne(id: Int!): User!
 }
 
 type Mutation {
   createUser(input: CreateUserDto!): User!
+  updateUser(id: String!, input: UpdateUserDto!): User!
+  removeUser(id: String!): Boolean!
 }
 
 input CreateUserDto {
+  nombre: String!
+  email: String!
+  password: String!
+}
+
+input UpdateUserDto {
   nombre: String!
   email: String!
   password: String!

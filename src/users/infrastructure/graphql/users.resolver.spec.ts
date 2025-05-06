@@ -4,6 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsersResolver } from './users.resolver';
 import { UsersService } from '../../application/use-cases/users.service';
 import { CreateUserDto } from '../../application/dto/create-user.dto';
+import { UpdateUserDto } from '../../application/dto/update-user.dto';
 import { User } from '../../domain/entities/user.entity';
 
 describe('UsersResolver', () => {
@@ -16,6 +17,14 @@ describe('UsersResolver', () => {
         { id: 1, nombre: 'Juan', email: 'juan@example.com', password: 'hashed' },
       ]);
     }),
+    findOneById: jest.fn((id: number): Promise<User> => {
+      return Promise.resolve({
+        id,
+        nombre: 'Juan',
+        email: 'juan@example.com',
+        password: 'hashed',
+      });
+    }),
     create: jest.fn((dto: CreateUserDto): Promise<User> => {
       return Promise.resolve({
         id: 2,
@@ -23,6 +32,17 @@ describe('UsersResolver', () => {
         email: dto.email,
         password: 'hashedPassword',
       });
+    }),
+    update: jest.fn((id: string, dto: UpdateUserDto): Promise<User> => {
+      return Promise.resolve({
+        id: Number(id),
+        nombre: dto.nombre || 'Juan',
+        email: dto.email || 'juan@example.com',
+        password: 'hashedPassword',
+      });
+    }),
+    remove: jest.fn((id: string): Promise<void> => {
+      return Promise.resolve();
     }),
   };
 
@@ -49,6 +69,13 @@ describe('UsersResolver', () => {
     expect(service.findAll).toHaveBeenCalled();
   });
 
+  it('findOne() debe retornar un usuario por ID', async () => {
+    const result = await resolver.findOne(1);
+    expect(result.id).toBe(1);
+    expect(result.nombre).toBe('Juan');
+    expect(service.findOneById).toHaveBeenCalledWith(1);
+  });
+
   it('createUser() debe crear y retornar un usuario', async () => {
     const dto: CreateUserDto = {
       nombre: 'Luis',
@@ -60,5 +87,24 @@ describe('UsersResolver', () => {
     expect(result.nombre).toBe('Luis');
     expect(result.email).toBe('luis@example.com');
     expect(service.create).toHaveBeenCalledWith(dto);
+  });
+
+  it('updateUser() debe actualizar y retornar un usuario', async () => {
+    const dto: UpdateUserDto = {
+      nombre: 'Carlos',
+      email: 'carlos@example.com',
+      password:'123456'
+    };
+
+    const result = await resolver.updateUser('1', dto);
+    expect(result.nombre).toBe('Carlos');
+    expect(result.email).toBe('carlos@example.com');
+    expect(service.update).toHaveBeenCalledWith('1', dto);
+  });
+
+  it('removeUser() debe eliminar un usuario', async () => {
+    const result = await resolver.removeUser('1');
+    expect(result).toBe(true);
+    expect(service.remove).toHaveBeenCalledWith('1');
   });
 });
