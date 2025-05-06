@@ -1,17 +1,16 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';
-import { User } from '../../domain/entities/user.entity';
+import { User } from 'src/users/domain/entities/user.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from '../dto/create-user.dto';
-import { UpdateUserDto } from '../dto/update-user.dto';
+import { CreateUserDto } from 'src/users/application/dto/create-user.dto';
+import { UpdateUserDto } from 'src/users/application/dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
 import { NotFoundException } from '@nestjs/common';
 

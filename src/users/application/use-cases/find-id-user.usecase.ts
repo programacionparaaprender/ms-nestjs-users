@@ -4,10 +4,10 @@ import { User } from 'src/users/domain/entities/user.entity';
 import { UserReportImplRepository } from 'src/users/infrastructure/users/repositories/user-report-impl.repository';
 
 @Injectable()
-export class FindAllUsersUseCase {
+export class FindIdUserUseCase {
     constructor(private readonly usersService: UserReportImplRepository) {}
-    execute(): Promise<User[]> {
-      return this.usersService.findAll();
+    execute(id:string | number): Promise<User> {
+      return this.usersService.findOneById(Number(id));
     }
 }
   

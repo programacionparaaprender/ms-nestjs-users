@@ -1,15 +1,15 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { User } from 'src/users/domain/entities/user.entity';
-import { CreateUserDto } from '../dto/create-user.dto';
+import { UpdateUserDto } from '../dto/update-user.dto';
 import { UserWriterImplRepository } from 'src/users/infrastructure/users/repositories/user-writer-impl.repository';
 
 
 @Injectable()
-export class CreateUserUseCase {
+export class UpdateUserUseCase {
     constructor(private readonly usersService: UserWriterImplRepository) {}
-    execute(params: CreateUserDto): Promise<User> {
-      return this.usersService.create(params);
+    execute(id: string, data: UpdateUserDto): Promise<User> {
+      return this.usersService.update(id, data);
     }
 }
   

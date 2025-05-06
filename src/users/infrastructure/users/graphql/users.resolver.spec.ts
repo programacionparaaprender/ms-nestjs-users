@@ -2,10 +2,10 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersResolver } from './users.resolver';
-import { UsersService } from '../../application/use-cases/users.service';
-import { CreateUserDto } from '../../application/dto/create-user.dto';
-import { UpdateUserDto } from '../../application/dto/update-user.dto';
-import { User } from '../../domain/entities/user.entity';
+import { UsersService } from 'src/users/infrastructure/users/repositories/users.service';
+import { CreateUserDto } from '../../../application/dto/create-user.dto';
+import { UpdateUserDto } from '../../../application/dto/update-user.dto';
+import { User } from '../../../domain/entities/user.entity';
 
 describe('UsersResolver', () => {
   let resolver: UsersResolver;
