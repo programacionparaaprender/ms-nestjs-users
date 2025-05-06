@@ -5,17 +5,24 @@ import { CreateUserDto } from '../../application/dto/create-user.dto';
 import { UpdateUserDto } from '../../application/dto/update-user.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { User } from '../../domain/entities/user.entity';
+import { FindAllUsersUseCase } from 'src/users/application/use-cases/find-all-users.usecase';
+import { CreateUserUseCase } from 'src/users/application/use-cases/create-user.usecase';
 
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+ 
+  constructor(private readonly usersService: UsersService,
+    private readonly findAllUsersUseCase: FindAllUsersUseCase,
+    private readonly createUserUseCase:CreateUserUseCase
+  ) {}
 
   @Get()
   @ApiOperation({ summary: 'Obtener todos los usuarios' })
   @ApiResponse({ status: 200, description: 'Lista de usuarios', type: [User] })
   findAll(): Promise<User[]> {
-    return this.usersService.findAll();
+    //return this.usersService.findAll();
+    return this.findAllUsersUseCase.execute();
   }
 
   @Get(':id')
@@ -31,7 +38,8 @@ export class UsersController {
   @ApiOperation({ summary: 'Crear un nuevo usuario' })
   @ApiResponse({ status: 201, description: 'Usuario creado', type: User })
   create(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.usersService.create(createUserDto);
+    //return this.usersService.create(createUserDto);
+    return this.createUserUseCase.execute(createUserDto);
   }
 
   @Put(':id')
