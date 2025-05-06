@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
-import { User } from 'src/users/domain/entities/user.entity';
-import { UserReportImplRepository } from 'src/users/infrastructure/users/repositories/user-report-impl.repository';
+import { User } from '../../domain/entities/user.entity';
+import { UserReportImplRepository } from '../../infrastructure/users/repositories/user-report-impl.repository';
 
 @Injectable()
 export class FindIdUserUseCase {

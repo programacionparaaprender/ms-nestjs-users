@@ -1,12 +1,12 @@
 /* eslint-disable prettier/prettier */
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { FindAllUsersUseCase } from 'src/users/application/use-cases/find-all-users.usecase';
-import { CreateUserUseCase } from 'src/users/application/use-cases/create-user.usecase';
-import { FindIdUserUseCase } from 'src/users/application/use-cases/find-id-user.usecase';
-import { UpdateUserUseCase } from 'src/users/application/use-cases/update-user.usecase';
-import { RemoveUserUseCase } from 'src/users/application/use-cases/remove-user.usecase';
-import { CreateUserDto } from 'src/users/application/dto/create-user.dto';
-import { UpdateUserDto } from 'src/users/application/dto/update-user.dto';
+import { FindAllUsersUseCase } from '../../../application/use-cases/find-all-users.usecase';
+import { CreateUserUseCase } from '../../../application/use-cases/create-user.usecase';
+import { FindIdUserUseCase } from '../../../application/use-cases/find-id-user.usecase';
+import { UpdateUserUseCase } from '../../../application/use-cases/update-user.usecase';
+import { RemoveUserUseCase } from '../../../application/use-cases/remove-user.usecase';
+import { CreateUserDto } from '../../../application/dto/create-user.dto';
+import { UpdateUserDto } from '../../../application/dto/update-user.dto';
 import { User } from '../../../domain/entities/user.entity';
 
 @Resolver(() => User)

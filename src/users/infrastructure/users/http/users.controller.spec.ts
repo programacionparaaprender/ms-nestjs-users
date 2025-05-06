@@ -1,107 +1,110 @@
 /* eslint-disable prettier/prettier */
-/* eslint-disable @typescript-eslint/unbound-method */
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller';
-import { UsersService } from 'src/users/infrastructure/users/repositories/users.service';
 import { CreateUserDto } from '../../../application/dto/create-user.dto';
 import { UpdateUserDto } from '../../../application/dto/update-user.dto';
 import { User } from '../../../domain/entities/user.entity';
+import { FindAllUsersUseCase } from '../../../application/use-cases/find-all-users.usecase';
+import { CreateUserUseCase } from '../../../application/use-cases/create-user.usecase';
+import { FindIdUserUseCase } from '../../../application/use-cases/find-id-user.usecase';
+import { UpdateUserUseCase } from '../../../application/use-cases/update-user.usecase';
+import { RemoveUserUseCase } from '../../../application/use-cases/remove-user.usecase';
 
 describe('UsersController', () => {
   let controller: UsersController;
-  let service: UsersService;
 
-  const mockUsersService = {
-    findAll: jest.fn((): Promise<User[]> => {
-      return Promise.resolve([
-        { id: 1, nombre: 'Juan', email: 'juan@example.com', password: 'hashed' },
-      ]);
-    }),
-    findOneById: jest.fn((id: string): Promise<User> => {
-      return Promise.resolve({
-        id: Number(id),
-        nombre: 'Carlos',
-        email: 'carlos@example.com',
-        password: 'hashedPassword',
-      });
-    }),
-    create: jest.fn((dto: CreateUserDto): Promise<User> => {
-      return Promise.resolve({
-        id: 2,
-        nombre: dto.nombre,
-        email: dto.email,
-        password: 'hashedPassword',
-      });
-    }),
-    update: jest.fn((id: string, dto: UpdateUserDto): Promise<User> => {
-      return Promise.resolve({
-        id: Number(id),
-        nombre: dto.nombre,
-        email: dto.email,
-        password: 'updatedPassword',
-      });
-    }),
-    remove: jest.fn((id: string): Promise<void> => {
-      return Promise.resolve();
-    }),
+  const user: User = {
+    id: 1,
+    nombre: 'Juan Pérez',
+    email: 'juan@example.com',
+    password: 'hashedpass',
+  };
+
+  const mockFindAllUsersUseCase = {
+    execute: jest.fn().mockResolvedValue([user]),
+  };
+
+  const mockFindIdUserUseCase = {
+    execute: jest.fn().mockResolvedValue(user),
+  };
+
+  const mockCreateUserUseCase = {
+    execute: jest.fn().mockImplementation((dto: CreateUserDto) =>
+      Promise.resolve({ ...user, ...dto, id: 2 })
+    ),
+  };
+
+  const mockUpdateUserUseCase = {
+    execute: jest.fn().mockImplementation((id: string, dto: UpdateUserDto) =>
+      Promise.resolve({ ...user, ...dto, id: Number(id) })
+    ),
+  };
+
+  const mockRemoveUserUseCase = {
+    execute: jest.fn().mockResolvedValue(undefined),
   };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
-      providers: [{ provide: UsersService, useValue: mockUsersService }],
+      providers: [
+        { provide: FindAllUsersUseCase, useValue: mockFindAllUsersUseCase },
+        { provide: CreateUserUseCase, useValue: mockCreateUserUseCase },
+        { provide: FindIdUserUseCase, useValue: mockFindIdUserUseCase },
+        { provide: UpdateUserUseCase, useValue: mockUpdateUserUseCase },
+        { provide: RemoveUserUseCase, useValue: mockRemoveUserUseCase },
+      ],
     }).compile();
 
     controller = module.get<UsersController>(UsersController);
-    service = module.get<UsersService>(UsersService);
   });
 
-  it('debe estar definido', () => {
+  it('should be defined', () => {
     expect(controller).toBeDefined();
   });
 
-  it('findAll() debe retornar lista de usuarios', async () => {
+  it('findAll should return an array of users', async () => {
     const result = await controller.findAll();
-    expect(result).toHaveLength(1);
-    expect(result[0].nombre).toBe('Juan');
-    expect(service.findAll).toHaveBeenCalled();
+    expect(result).toEqual([user]);
+    expect(mockFindAllUsersUseCase.execute).toHaveBeenCalled();
   });
 
-  it('create() debe crear y retornar un usuario', async () => {
+  it('findOne should return a user by ID', async () => {
+    const result = await controller.findOne('1');
+    expect(result).toEqual(user);
+    expect(mockFindIdUserUseCase.execute).toHaveBeenCalledWith('1');
+  });
+
+  it('create should return the created user', async () => {
     const dto: CreateUserDto = {
       nombre: 'Luis',
       email: 'luis@example.com',
       password: '123456',
     };
-
     const result = await controller.create(dto);
-    expect(result.nombre).toBe('Luis');
-    expect(result.email).toBe('luis@example.com');
-    expect(service.create).toHaveBeenCalledWith(dto);
+    expect(result).toMatchObject({
+      id: 2,
+      nombre: dto.nombre,
+      email: dto.email,
+    });
+    expect(mockCreateUserUseCase.execute).toHaveBeenCalledWith(dto);
   });
 
-  it('findOne() debe retornar un usuario por ID', async () => {
-    const result = await controller.findOne('5');
-    expect(result.id).toBe(5);
-    expect(result.nombre).toBe('Carlos');
-    expect(service.findOneById).toHaveBeenCalledWith('5');
-  });
-
-  it('update() debe actualizar y retornar el usuario actualizado', async () => {
+  it('update should return the updated user', async () => {
     const dto: UpdateUserDto = {
       nombre: 'Pedro',
-      email: 'pedro@example.com',
-      password: '123456'
+      email: 'luis@example.com',
+      password: 'newpassword',
     };
-
-    const result = await controller.update('3', dto);
-    expect(result.id).toBe(3);
+    const result = await controller.update('1', dto);
     expect(result.nombre).toBe('Pedro');
-    expect(service.update).toHaveBeenCalledWith('3', dto);
+    expect(result.id).toBe(1);
+    expect(mockUpdateUserUseCase.execute).toHaveBeenCalledWith('1', dto);
   });
 
-  it('remove() debe eliminar un usuario', async () => {
-    await controller.remove('7');
-    expect(service.remove).toHaveBeenCalledWith('7');
+  it('remove should return void', async () => {
+    const result = await controller.remove('1');
+    expect(result).toBeUndefined();
+    expect(mockRemoveUserUseCase.execute).toHaveBeenCalledWith('1');
   });
 });

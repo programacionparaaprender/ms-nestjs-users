@@ -6,9 +6,9 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto } from 'src/users/application/dto/create-user.dto';
-import { User } from 'src/users/domain/entities/user.entity';
-import { UpdateUserDto } from 'src/users/application/dto/update-user.dto';
+import { CreateUserDto } from '../../../application/dto/create-user.dto';
+import { User } from '../../../domain/entities/user.entity';
+import { UpdateUserDto } from '../../../application/dto/update-user.dto';
 
 
 @Injectable()

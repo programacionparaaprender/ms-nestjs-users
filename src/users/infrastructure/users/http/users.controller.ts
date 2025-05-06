@@ -4,11 +4,11 @@ import { CreateUserDto } from '../../../application/dto/create-user.dto';
 import { UpdateUserDto } from '../../../application/dto/update-user.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { User } from '../../../domain/entities/user.entity';
-import { FindAllUsersUseCase } from 'src/users/application/use-cases/find-all-users.usecase';
-import { CreateUserUseCase } from 'src/users/application/use-cases/create-user.usecase';
-import { FindIdUserUseCase } from 'src/users/application/use-cases/find-id-user.usecase';
-import { UpdateUserUseCase } from 'src/users/application/use-cases/update-user.usecase';
-import { RemoveUserUseCase } from 'src/users/application/use-cases/remove-user.usecase';
+import { FindAllUsersUseCase } from '../../../application/use-cases/find-all-users.usecase';
+import { CreateUserUseCase } from '../../../application/use-cases/create-user.usecase';
+import { FindIdUserUseCase } from '../../../application/use-cases/find-id-user.usecase';
+import { UpdateUserUseCase } from '../../../application/use-cases/update-user.usecase';
+import { RemoveUserUseCase } from '../../../application/use-cases/remove-user.usecase';
 
 @ApiTags('Users')
 @Controller('users')
