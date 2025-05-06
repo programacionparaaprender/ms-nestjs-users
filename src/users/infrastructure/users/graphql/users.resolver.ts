@@ -5,8 +5,8 @@ import { CreateUserUseCase } from 'src/users/application/use-cases/create-user.u
 import { FindIdUserUseCase } from 'src/users/application/use-cases/find-id-user.usecase';
 import { UpdateUserUseCase } from 'src/users/application/use-cases/update-user.usecase';
 import { RemoveUserUseCase } from 'src/users/application/use-cases/remove-user.usecase';
-import { CreateUserDto } from '../../../application/dto/create-user.dto';
-import { UpdateUserDto } from '../../../application/dto/update-user.dto';
+import { CreateUserDto } from 'src/users/application/dto/create-user.dto';
+import { UpdateUserDto } from 'src/users/application/dto/update-user.dto';
 import { User } from '../../../domain/entities/user.entity';
 
 @Resolver(() => User)
